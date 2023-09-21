@@ -1,27 +1,43 @@
-# Created by newuser for 5.8.1
+[[ -r ~/Repos/znap/znap.zsh ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ~/Repos/znap
+source ~/Repos/znap/znap.zsh  # Start Znap
 
-source "${HOME}/.zgen/zgen.zsh"
+znap source eendroroy/alien-minimal
+znap source zsh-users/zsh-autosuggestions
+znap source zsh-users/zsh-syntax-highlighting
+znap source zdharma-continuum/fast-syntax-highlighting
+znap source chitoku-k/fzf-zsh-completions
+znap source marlonrichert/zsh-autocomplete
 
-HISTFILE=~/.histfile
+zstyle -e ':autocomplete:list-choices:*' list-lines 'reply=( $(( LINES / 3 )) )'
+zstyle ':autocomplete:history-incremental-search-backward:*' list-lines 8
+zstyle ':autocomplete:history-search-backward:*' list-lines 8
 
-if ! zgen saved; then
-    # Plugins
-    zgen load eendroroy/alien-minimal
-    zgen load zsh-users/zsh-autosuggestions
-    zgen load zsh-users/zsh-syntax-highlighting
-    zgen load zdharma-continuum/fast-syntax-highlighting
-    zgen load ~/repos/zsh-autocomplete
-    zgen load chitoku-k/fzf-zsh-completions
+bindkey -M menuselect '\r' .accept-line
 
-    zgen save
-fi
+function lf() {
+	eza -lF --color=always | grep -v /
+}
 
-alias ld='eza -lD'
-alias lf='eza -lF —-color=always | grep -v /'
-alias lh='eza -dl .* —-group-directories-first'
-alias ll='eza -al —-group-directories-first'
-alias ls='eza -alF —-color=always —-sort=size | grep -v /'
-alias lt='eza -al —-sort=modified'
+function lh() {
+	eza -dl .* --group-directories-first
+}
+
+function ll {
+	eza -al --group-directories-first
+}
+
+function ls() {
+	eza -alF --color=always --sort=size | grep -v /
+}
+
+function lt() {
+	eza -al -sort=modified
+}
+
+function lg() {
+	eza -l --git-ignore
+}
 
 eval "$(zoxide init zsh)"
-
